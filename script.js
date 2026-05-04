@@ -251,12 +251,9 @@
 
   if (playBtn && videoPlaceholder && ytPlayer) {
     videoPlaceholder.addEventListener('click', () => {
-      const src = ytPlayer.dataset.src;
-      if (src) {
-        ytPlayer.src = src;
-        ytPlayer.classList.remove('hidden');
-        videoPlaceholder.style.display = 'none';
-      }
+      videoPlaceholder.style.display = 'none';
+      ytPlayer.classList.remove('hidden');
+      ytPlayer.play();
     });
   }
 
@@ -585,3 +582,26 @@
   }
 
 })();
+function openDirections() {
+  const destination = '28.370306,77.550722';
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        const url = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=driving`;
+        window.open(url, '_blank');
+      },
+      () => {
+        window.open(`https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=${destination}&travelmode=driving`, '_blank');
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: 5000,
+        maximumAge: 60000
+      }
+    );
+  } else {
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${destination}&travelmode=driving`, '_blank');
+  }
+}
